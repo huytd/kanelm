@@ -3,13 +3,13 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode as Decode
-import Json.Encode as Encode
 
 import Models exposing (..)
 import Views exposing (..)
 import EventHelpers exposing (..)
 
+
+main : Program (Maybe Model) Model Msg
 main = Html.programWithFlags {
           init = initModel,
           update = update,
