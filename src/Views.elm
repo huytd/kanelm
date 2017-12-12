@@ -19,13 +19,13 @@ taskItemView index task =
 
 -- COLUMN VIEW
 
-taskColumnView : TaskStatus -> List Task -> Html Msg
+taskColumnView : String -> List Task -> Html Msg
 taskColumnView status list =
-  div [ class <| "category " ++ String.toLower (toString status ),
+  div [ class <| "category " ++ String.toLower status,
         attribute "ondragover" "return false",
         onDrop <| DropTask status
       ] [
-      h2 [] [ text (toString status) ],
+      h2 [] [ text status ],
       span [] [ text (toString (List.length list) ++ " item(s)") ],
       ul [] (List.indexedMap taskItemView list)
     ]

@@ -10,15 +10,12 @@ import Models exposing (..)
 import Views exposing (..)
 import EventHelpers exposing (..)
 
-main = Html.program {
+main = Html.programWithFlags {
           init = initModel,
           update = update,
-          subscriptions = subscriptions,
+          subscriptions = (always Sub.none),
           view = view
         }
-
-subscriptions : Model -> Sub Msg
-subscriptions model = Sub.none
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -38,17 +35,7 @@ update msg model =
     Move selectedTask ->
       ( { model | movingTask = Just selectedTask }, Cmd.none )
 
-    DropTask targetStatus ->
-      let
-          newTasks =
-            case model.movingTask of
-              Just task -> moveTaskToStatus task targetStatus model.tasks
-              Nothing -> model.tasks
-      in
-         ( { model | 
-             tasks = newTasks,
-             movingTask = Nothing 
-           }, Cmd.none )
+    DropTask targetStatus -> moveTask model targetStatus
 
 view : Model -> Html Msg
 view model =
@@ -68,8 +55,8 @@ view model =
           value model.taskInput
         ] [ ],
         div [ class "kanban-board" ] [
-          taskColumnView Todo todos,
-          taskColumnView OnGoing ongoing,
-          taskColumnView Done dones
+          taskColumnView "Todo" todos,
+          taskColumnView "OnGoing" ongoing,
+          taskColumnView "Done" dones
         ]
       ]

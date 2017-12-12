@@ -1,12 +1,10 @@
-module Models exposing (..)
+port module Models exposing (..)
 
-type Msg = NoOp | KeyDown Int | TextInput String | Move Task | DropTask TaskStatus
-
-type TaskStatus = Todo | OnGoing | Done
+type Msg = NoOp | KeyDown Int | TextInput String | Move Task | DropTask String
 
 type alias Task = {
     name: String,
-    status: TaskStatus
+    status: String
   }
 
 type alias Model = {
@@ -15,29 +13,37 @@ type alias Model = {
   movingTask: Maybe Task
 }
 
+-- PORTS
+
+port setStorage : Model -> Cmd msg
+
+saveData : Model -> ( Model, Cmd Msg )
+saveData model = ( model, setStorage model )
+
 -- INITIAL FUNCTION
 
-initModel : ( Model, Cmd msg )
-initModel = ( Model ""
-  [
-    Task "Demo Task #1" OnGoing,
-    Task "Demo Task #2" Todo,
-    Task "Demo Task #3" Done
-  ] Nothing, Cmd.none )
+initModel : Maybe Model -> ( Model, Cmd msg )
+initModel model = 
+  case model of
+    Just model -> ( model, Cmd.none )
+    Nothing -> ( Model "" [] Nothing, Cmd.none )
+
 
 -- ADD TASK
 
 addNewTask : Model -> ( Model, Cmd Msg )
 addNewTask model =
-  ( { model | 
-      tasks = model.tasks ++ [ Task model.taskInput Todo ],
-      taskInput = ""
-    }
-  , Cmd.none )
+  let
+     newModel = { model | 
+                   tasks = model.tasks ++ [ Task model.taskInput "Todo" ],
+                   taskInput = ""
+                }
+  in
+     ( newModel, Cmd.batch [ setStorage newModel, Cmd.none ] )
 
 -- CHANGE TASK STATUS
 
-moveTaskToStatus : Task -> TaskStatus -> List Task -> List Task
+moveTaskToStatus : Task -> String -> List Task -> List Task
 moveTaskToStatus taskToFind newTaskStatus tasks =
   List.map (\t -> 
     if t.name == taskToFind.name then
@@ -46,18 +52,32 @@ moveTaskToStatus taskToFind newTaskStatus tasks =
        t
      ) tasks
 
+
+moveTask : Model -> String -> ( Model, Cmd Msg )
+moveTask model targetStatus =
+  let
+      newTasks =
+        case model.movingTask of
+          Just task -> moveTaskToStatus task targetStatus model.tasks
+          Nothing -> model.tasks
+
+      newModel = { model | tasks = newTasks, movingTask = Nothing }
+  in
+      ( newModel, Cmd.batch [ setStorage newModel, Cmd.none ] )
+
+
 -- GET TASKS BY STATUS
 
 getOnGoingTasks : Model -> List Task
 getOnGoingTasks model =
-  List.filter (\t -> t.status == OnGoing) model.tasks
+  List.filter (\t -> t.status == "OnGoing") model.tasks
 
 getToDoTasks : Model -> List Task
 getToDoTasks model =
-  List.filter (\t -> t.status == Todo) model.tasks
+  List.filter (\t -> t.status == "Todo") model.tasks
 
 getDoneTasks : Model -> List Task
 getDoneTasks model =
-  List.filter (\t -> t.status == Done) model.tasks
+  List.filter (\t -> t.status == "Done") model.tasks
 
 
