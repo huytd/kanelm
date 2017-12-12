@@ -3,51 +3,22 @@ port module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Decode
+import Json.Encode as Encode
+
 import Models exposing (..)
-import Json.Decode as Json
-
-type Msg = NoOp | KeyDown Int | TextInput String | Move Task | DropTask TaskStatus
-
+import Views exposing (..)
+import EventHelpers exposing (..)
 
 main = Html.program {
-          init = init,
+          init = initModel,
           update = update,
           subscriptions = subscriptions,
           view = view
         }
 
-
-init : ( Model, Cmd msg )
-init = ( Model ""
-  [
-    Task "Demo Task #1" OnGoing,
-    Task "Demo Task #2" Todo,
-    Task "Demo Task #3" Done
-  ] Nothing, Cmd.none )
-
-
 subscriptions : Model -> Sub Msg
 subscriptions model = Sub.none
-
-
-addNewTask : Model -> ( Model, Cmd Msg )
-addNewTask model =
-  ( { model | 
-      tasks = model.tasks ++ [ Task model.taskInput Todo ],
-      taskInput = ""
-    }
-  , Cmd.none )
-
-
-moveTaskToStatus : Task -> TaskStatus -> List Task -> List Task
-moveTaskToStatus taskToRemove newTaskStatus tasks =
-  List.map (\t -> 
-    if t.name == taskToRemove.name then
-       { t | status = newTaskStatus }
-    else
-       t
-     ) tasks
-
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -78,65 +49,6 @@ update msg model =
              tasks = newTasks,
              movingTask = Nothing 
            }, Cmd.none )
-
-
-getOnGoingTasks : Model -> List Task
-getOnGoingTasks model =
-  List.filter (\t -> t.status == OnGoing) model.tasks
-
-getToDoTasks : Model -> List Task
-getToDoTasks model =
-  List.filter (\t -> t.status == Todo) model.tasks
-
-getDoneTasks : Model -> List Task
-getDoneTasks model =
-  List.filter (\t -> t.status == Done) model.tasks
-
-
-
-onKeyDown : (Int -> msg) -> Attribute msg
-onKeyDown tagger = on "keydown" (Json.map tagger keyCode)
-
-onDragStart : msg -> Attribute msg
-onDragStart message = on "dragstart" (Json.succeed message)
-
-onDragEnd : msg -> Attribute msg
-onDragEnd message = on "dragend" (Json.succeed message)
-
-
-onDrop : msg -> Attribute msg
-onDrop message = onWithOptions "drop"
-                  { preventDefault = True,
-                    stopPropagation = False
-                  }
-                  (Json.succeed message)
-
-
-taskItemView : Int -> Task -> Html Msg
-taskItemView index task =
-  li [  class "task-item",
-        attribute "draggable" "true",
-        onDragStart <| Move task,
-        attribute "ondragstart" "event.dataTransfer.setData('text/plain', '')"
-      ] [ text task.name ]
-
-
-taskColumnView : TaskStatus -> List Task -> Html Msg
-taskColumnView status list =
-  div [ class <| "category " ++ String.toLower (toString status ),
-        attribute "ondragover" "return false",
-        onDrop <| DropTask status
-      ] [
-      h2 [] [ text (toString status) ],
-      span [] [ text (toString (List.length list) ++ " item(s)") ],
-      ul [] (List.indexedMap taskItemView list)
-    ]
-
-movingTaskView : Model -> Html Msg
-movingTaskView model =
-  case model.movingTask of
-    Just task -> div [] [ div [] [ text (toString task.status) ], text task.name ]
-    Nothing -> div [] [ text "No task is moving" ]
 
 view : Model -> Html Msg
 view model =

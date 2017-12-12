@@ -1,0 +1,32 @@
+module Views exposing (..)
+
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+
+import Models exposing (..)
+import EventHelpers exposing (..)
+
+-- CARD VIEW
+
+taskItemView : Int -> Task -> Html Msg
+taskItemView index task =
+  li [  class "task-item",
+        attribute "draggable" "true",
+        onDragStart <| Move task,
+        attribute "ondragstart" "event.dataTransfer.setData('text/plain', '')"
+      ] [ text task.name ]
+
+-- COLUMN VIEW
+
+taskColumnView : TaskStatus -> List Task -> Html Msg
+taskColumnView status list =
+  div [ class <| "category " ++ String.toLower (toString status ),
+        attribute "ondragover" "return false",
+        onDrop <| DropTask status
+      ] [
+      h2 [] [ text (toString status) ],
+      span [] [ text (toString (List.length list) ++ " item(s)") ],
+      ul [] (List.indexedMap taskItemView list)
+    ]
+
