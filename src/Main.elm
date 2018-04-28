@@ -20,7 +20,7 @@ main = Html.programWithFlags {
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
-    NoOp -> 
+    NoOp ->
       ( model, Cmd.none )
 
     KeyDown key ->
@@ -36,6 +36,9 @@ update msg model =
       ( { model | movingTask = Just selectedTask }, Cmd.none )
 
     DropTask targetStatus -> moveTask model targetStatus
+
+    Delete content -> deleteTask model content
+
 
 view : Model -> Html Msg
 view model =

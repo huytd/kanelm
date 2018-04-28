@@ -1,6 +1,6 @@
 port module Models exposing (..)
 
-type Msg = NoOp | KeyDown Int | TextInput String | Move Task | DropTask String
+type Msg = NoOp | KeyDown Int | TextInput String | Move Task | DropTask String | Delete String
 
 type alias Task = {
     name: String,
@@ -65,6 +65,15 @@ moveTask model targetStatus =
   in
       ( newModel, Cmd.batch [ setStorage newModel, Cmd.none ] )
 
+
+-- DELETE TASK
+
+deleteTask : Model -> String -> ( Model, Cmd Msg )
+deleteTask model name =
+    let
+        newModel = { model | tasks = List.filter (\x -> x.name /= name) model.tasks }
+    in
+        ( newModel, Cmd.batch [ setStorage newModel, Cmd.none ] )
 
 -- GET TASKS BY STATUS
 

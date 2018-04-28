@@ -11,11 +11,16 @@ import EventHelpers exposing (..)
 
 taskItemView : Int -> Task -> Html Msg
 taskItemView index task =
-  li [  class "task-item",
-        attribute "draggable" "true",
-        onDragStart <| Move task,
-        attribute "ondragstart" "event.dataTransfer.setData('text/plain', '')"
-      ] [ text task.name ]
+  li [ class "task-item",
+       attribute "draggable" "true",
+       onDragStart <| Move task,
+       attribute "ondragstart" "event.dataTransfer.setData('text/plain', '')"
+     ]
+     [ text task.name
+     , button [ class "btn-delete"
+              , onClick <| Delete task.name
+              ][ text "+" ]
+     ]
 
 -- COLUMN VIEW
 

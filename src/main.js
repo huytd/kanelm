@@ -4,7 +4,7 @@ require('./main.scss');
 const config = require('./config');
 const Elm = require('./Main.elm');
 
-fetch(config.URL, {
+fetch(config.URL + "/latest", {
     headers: {
         "secret-key": config.SECRET
     }
@@ -20,7 +20,7 @@ fetch(config.URL, {
                 "content-type": "application/json",
                 "secret-key": config.SECRET
             },
-            data: JSON.stringify(state)
+            body: JSON.stringify(state)
         });
     });
 });
