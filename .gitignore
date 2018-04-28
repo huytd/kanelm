@@ -1,2 +1,4 @@
 elm-stuff
 node_modules
+dist
+config.js

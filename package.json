@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --port 3000",
+    "start": "webpack-dev-server",
     "build": "webpack -p"
   },
   "dependencies": {
