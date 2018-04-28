@@ -47,7 +47,7 @@ view model =
       ongoing = getOnGoingTasks model
       dones = getDoneTasks model
   in
-      div [ class "container" ] [
+      div [ class "container dark" ] [
         input [ 
           type_ "text", 
           class "task-input",

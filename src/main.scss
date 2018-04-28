@@ -1,7 +1,6 @@
 html, body {
   width: 100%; height: 100%;
   margin: 0; padding: 0;
-  background: #F6F6F6;
   box-sizing: border-box;
 }
 
@@ -14,6 +13,7 @@ html, body {
   width: 100%; height: 100%;
   display: flex;
   flex-direction: column;
+  background: #F6F6F6;
 
   .task-input {
     padding: 10px;
@@ -96,4 +96,26 @@ html, body {
       }
     }
   }
+}
+
+.container.dark {
+    background: #1d1f21;
+
+    .task-input {
+        background: #292c2f;
+        color: #FAFAFA;
+    }
+
+    .kanban-board {
+        .category {
+            h2 {
+                color: #7e848d;
+            }
+
+            ul li {
+                background: #35393c;
+                color: #e8e8e8;
+            }
+        }
+    }
 }
