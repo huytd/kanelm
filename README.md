@@ -28,3 +28,25 @@ Create an account on https://jsonbin.io/ to obtain the Secret key, create a new 
 ## Deploy it on your server
 
 To deploy it on your server, just run `npm build` and copy the two files in `dist` folder. It run as a static HTML page, so you can even put it on Github Pages.
+
+## Themes
+
+To use dark theme, add `dark` class into `container**:
+
+**src/Main.elm**
+
+```elm
+view : Model -> Html Msg
+view model =
+  ...
+      div [ class "container dark" ] [
+  ...
+```
+
+Light theme
+
+![](light-theme.png)
+
+Dark theme
+
+![](dark-theme.png)
