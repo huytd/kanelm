@@ -20,6 +20,12 @@ cp src/example.config.js src/config.js
 
 Create an account on https://jsonbin.io/ to obtain the Secret key, create a new JSON file on this site. Put the URL into your `config.js`.
 
+The initial data for your JSON file should be:
+
+```json
+{"taskInput": "", "tasks": [], "movingTask": null}
+```
+
 4. Start the dev server:
   ```
   npm start
