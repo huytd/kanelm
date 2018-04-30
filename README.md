@@ -9,9 +9,10 @@ Assume you already have Node and Elm installed, you can use either NPM or Yarn.
 1. Clone this project
 2. Install dependencies:
   ```
-  npm install
+  yarn
   elm-package install
   ```
+  > :bulb: Note: Use `yarn` since the `yarn.lock` dependency file is up to date.
 3. Create config file from example config:
 
 ```
@@ -41,7 +42,7 @@ The initial data for your JSON file should be:
 
 4. Start the dev server:
   ```
-  npm start
+  yarn start
   ```
 
 ## Deploy it on your server
