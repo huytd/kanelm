@@ -22,6 +22,17 @@ Create an account on https://jsonbin.io/ to obtain the Secret key, create a new 
 
 ![](jsonbin-url.png)
 
+Be sure to append a `https:` suffix to the API URL in the `config.js`, otherwise the built version in [kanban-app](https://github.com/huytd/kanban-app) won't work.
+
+Your config should look something like this:
+
+```javascript
+module.exports = {
+    SECRET: 'you-api-secret-here',
+    URL: 'https://api.jsonbin.io/b/{id-of-jsonbin-bin}'
+};
+```
+
 The initial data for your JSON file should be:
 
 ```json
