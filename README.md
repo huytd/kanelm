@@ -9,9 +9,10 @@ Assume you already have Node and Elm installed, you can use either NPM or Yarn.
 1. Clone this project
 2. Install dependencies:
   ```
-  npm install
+  yarn
   elm-package install
   ```
+  > :bulb: Note: Use `yarn` since the `yarn.lock` dependency file is up to date.
 3. Create config file from example config:
 
 ```
@@ -22,6 +23,17 @@ Create an account on https://jsonbin.io/ to obtain the Secret key, create a new 
 
 ![](jsonbin-url.png)
 
+Be sure to append a `https:` suffix to the API URL in the `config.js`, otherwise the built version in [kanban-app](https://github.com/huytd/kanban-app) won't work.
+
+Your config should look something like this:
+
+```javascript
+module.exports = {
+    SECRET: 'you-api-secret-here',
+    URL: 'https://api.jsonbin.io/b/{id-of-jsonbin-bin}'
+};
+```
+
 The initial data for your JSON file should be:
 
 ```json
@@ -30,7 +42,7 @@ The initial data for your JSON file should be:
 
 4. Start the dev server:
   ```
-  npm start
+  yarn start
   ```
 
 ## Deploy it on your server
