@@ -23,7 +23,20 @@ taskItemView index task =
      ]
 
 enrichItemContent : String -> Html Msg
-enrichItemContent str = Html.div [] (List.intersperse (text " ") (List.map (\w -> if String.startsWith "http" w then a [target "_blank", href w] [text w] else text w) (String.words str)))
+enrichItemContent str =
+  List.map
+      (\word ->
+        if
+          String.startsWith "http" word
+        then
+          a [target "_blank", href word] [text word] 
+        else
+          text word
+      )
+      (String.words str)
+    |> List.intersperse (text " ")
+    |> Html.div []
+
 
 -- COLUMN VIEW
 
