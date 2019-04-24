@@ -100,6 +100,7 @@ html, body {
 
 .container.dark {
     background: #1d1f21;
+    overflow-x: scroll;
 
     .task-input {
         background: #292c2f;
