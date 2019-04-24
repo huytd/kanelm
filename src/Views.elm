@@ -16,11 +16,27 @@ taskItemView index task =
        onDragStart <| Move task,
        attribute "ondragstart" "event.dataTransfer.setData('text/plain', '')"
      ]
-     [ text task.name
+     [ enrichItemContent task.name
      , button [ class "btn-delete"
               , onClick <| Delete task.name
               ][ text "+" ]
      ]
+
+enrichItemContent : String -> Html Msg
+enrichItemContent str =
+  List.map
+      (\word ->
+        if
+          String.startsWith "http" word
+        then
+          a [target "_blank", href word] [text word] 
+        else
+          text word
+      )
+      (String.words str)
+    |> List.intersperse (text " ")
+    |> Html.div []
+
 
 -- COLUMN VIEW
 
@@ -34,4 +50,3 @@ taskColumnView status list =
       span [] [ text (toString (List.length list) ++ " item(s)") ],
       ul [] (List.indexedMap taskItemView list)
     ]
-
